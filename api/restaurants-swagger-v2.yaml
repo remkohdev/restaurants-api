@@ -1,0 +1,93 @@
+swagger: '2.0'
+info:
+  description: 'Restaurant API.'
+  version: '1.0.0'
+  title: 'Swagger Restaurant API'
+  termsOfService: 'http://ibm.com/terms/tbd'
+  contact:
+    email: 'remkohdev@gmail.com'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: '192.168.1.3:3000'
+basePath: '/v2'
+tags:
+  - name: 'restaurants'
+    description: 'Restaurants data'
+    externalDocs:
+      description: 'Find out more'
+      url: 'http://ibm.com/docs/tbd'
+schemes:
+  - 'http'
+paths:
+  /rating/{userId}:
+    get:
+      tags:
+        - 'rating'
+      summary: 'Find ratings by user ID'
+      description: 'Return ratings by user ID'
+      operationId: 'getRating'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'User ID of ratings to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Rating'
+        400:
+          description: 'Invalid user ID supplied'
+        404:
+          description: 'Ratings not found'
+  /rating:
+    post:
+      tags:
+        - 'rating'
+      summary: 'Create Rating'
+      description: 'Create Rating by logged in user.'
+      operationId: 'createRating'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Created rating object'
+          required: true
+          schema:
+            $ref: '#/definitions/Rating'
+      responses:
+        default:
+          description: 'successful operation'
+definitions:
+  Rating:
+    required:
+      - userId
+      - placeId
+      - visited
+      - rating
+    type: object
+    properties:
+      ratingId:
+        type: integer
+        format: int64
+      userId:
+        type: integer
+        format: int64
+      placeId:
+        type: string
+        minLength: 1
+        maxLength: 50
+      visited:
+        type: boolean
+      rating:
+        type: string
+        minLength: 1
+        maxLength: 50
